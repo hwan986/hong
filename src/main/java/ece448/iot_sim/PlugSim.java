@@ -28,6 +28,7 @@ public class PlugSim {
 	 */
 	synchronized public void switchOn() {
 		// P1: add your code here
+		on = true;
 	}
 
 	/**
