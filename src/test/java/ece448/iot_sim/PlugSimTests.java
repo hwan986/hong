@@ -136,7 +136,7 @@ public class PlugSimTests {
 		plug.updatePower(100);
 		plug.measurePower();
 	
-		assertTrue(plug.isOn());
+		assertTrue(100-20 <=plug.getPower() && plug.getPower()<= 100+20 );
 	
 	}
 	@Test
@@ -146,7 +146,7 @@ public class PlugSimTests {
 		plug.updatePower(50);
 		plug.measurePower();
 	
-		assertTrue(plug.isOn());
+		assertTrue(50 <=plug.getPower() && plug.getPower()<= 50+100 );
 	
 	}
 
@@ -157,7 +157,7 @@ public class PlugSimTests {
 		plug.updatePower(400);
 		plug.measurePower();
 	
-		assertTrue(plug.isOn());
+		assertTrue(400-100 <=plug.getPower() && plug.getPower()<= 400 );
 	
 	}
 
