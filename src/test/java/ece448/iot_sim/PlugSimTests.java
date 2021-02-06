@@ -28,13 +28,7 @@ public class PlugSimTests {
 		assertEquals("a",plug.getName());
 	}
 
-	@Test
-	public void testName2() {
-		PlugSim plug = new PlugSim("a.100");
-
-		assertEquals("a.100",plug.getName());
-	}
-
+	
 
 	@Test
 	public void testSwitchOff() {
@@ -93,27 +87,7 @@ public class PlugSimTests {
 	
 		assertTrue(plug.getPower()==230 && plug.isOn());
 	}
-	/**
-	@Test	
-	public void testPower2(){
-		PlugSim plug = new PlugSim("b.50");
-		plug.switchOn();
-		plug.measurePower();
-	
-		assertTrue(plug.getPower()==50);
-	}
-	**/
-	
-	/**
-	@Test
-	public void testPower3(){
-		PlugSim plug = new PlugSim("b.500");
-		plug.switchOn();
-		plug.measurePower();
-	
-		assertTrue(plug.getPower()==500);
-	}
-	**/
+
 
 	@Test
 	public void testPower2(){
