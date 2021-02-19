@@ -118,6 +118,24 @@ public class HTTPCommandsTests {
 		assertEquals(result, "<html><body><p>Plug a is on.</p><p>Power reading is 0.000.</p><p><a href='/a?action=on'>Switch On</a></p><p><a href='/a?action=off'>Switch Off</a></p><p><a href='/a?action=toggle'>Toggle</a></p></body></html>");
 	}
 
+	@Test
+	public void test7() {
+		PlugSim a = new PlugSim("a");
+		PlugSim x = new PlugSim("x");
+
+		ArrayList<PlugSim> list = new ArrayList<>();
+		list.add(a);
+		list.add(x);
+
+		HTTPCommands cmds = new HTTPCommands(list);
+
+		HashMap<String,String> params = new HashMap<>();
+		params.put("action", "to");
+
+		String result  = cmds.handleGet("/a", params);
+		//assertEquals(true, a.isOn());
+		assertEquals(result,"<html><body></body></html>");
+	}
 
 
 }
