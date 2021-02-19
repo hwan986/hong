@@ -41,6 +41,24 @@ public class HTTPCommands implements RequestHandler {
 		String action = params.get("action");
 		if (action == null)
 			return report(plug);
+		if(action.equals("on"))
+		{
+			plug.switchOn();
+		     return report(plug);
+		}
+		if(action.equals("off"))
+		{
+			plug.switchOff();
+		     return report(plug);
+		}
+		if(action.equals("toggle"))
+		{
+			plug.toggle();
+		     return report(plug);
+		}
+
+
+
 
 		// P2: add your code here, modify the next line if necessary
 		return "<html><body></body></html>";
