@@ -57,9 +57,6 @@ public class HTTPCommands implements RequestHandler {
 		     return report(plug);
 		}
 
-
-
-
 		// P2: add your code here, modify the next line if necessary
 		return "<html><body></body></html>";
 	}
