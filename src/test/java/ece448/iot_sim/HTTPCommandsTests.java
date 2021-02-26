@@ -157,7 +157,7 @@ public class HTTPCommandsTests {
 	}
 	
 	@Test
-	public void test9() throws Exception {
+	public void test9()  {
 		PlugSim a = new PlugSim("a.700");
 		
 		
@@ -186,7 +186,7 @@ public class HTTPCommandsTests {
 	
 	}
 	@Test
-	public void test10() throws Exception {
+	public void test10()  {
 		PlugSim a = new PlugSim("a.700");
 		
 		
