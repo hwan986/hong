@@ -146,13 +146,10 @@ public class HTTPCommandsTests {
 	@Test
 	public void test8() throws Exception {
 		PlugSim a = new PlugSim("a.700");
-		
-
+	
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
-		
-
 		HTTPCommands cmds = new HTTPCommands(list);
 
 		HashMap<String,String> params = new HashMap<>();
@@ -162,7 +159,8 @@ public class HTTPCommandsTests {
 
 		String result  = cmds.handleGet("/a.700", params);
 		
-		assertEquals(result,"");
+		//assertEquals(result,"");
+		assertTrue(result.indexOf("Power reading is 0.000") !=-1);
 	
 	}
 
