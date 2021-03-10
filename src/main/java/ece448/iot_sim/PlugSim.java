@@ -1,5 +1,7 @@
 package ece448.iot_sim;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +28,29 @@ public class PlugSim {
 	/**
 	 * Switch the plug on.
 	 */
+	
 	public static interface Observer{
 		void update(String name, String key, String value);
 	}
+
+	private final ArrayList<Observer> observers = new ArrayList<>();
+	synchronized public void addObserver(Observer observer){
+		observers.add(observer);
+		observer.update(name, "state", on? "on": "off");
+		observer.update(name, "power", String.format("%.3f", power));
+	}
+
 	synchronized public void switchOn() {
 		// P1: add your code here
-		on = true;
+		updateState(true);
+	}
+
+	protected void updateState(boolean o){
+		on = o;
+		logger.info("Plug {}: state {}", name, on? "on": "off");
+		for(Observer observer: observers){
+			observer.update(name, "state", on? "on": "off");
+		}
 	}
 
 	/**
@@ -40,7 +59,7 @@ public class PlugSim {
 	synchronized public void switchOff() {
 		// P1: add your code here
 
-		on = false;
+		updateState(false);
 	}
 
 	/**
@@ -106,4 +125,6 @@ public class PlugSim {
 
 
 	private static final Logger logger = LoggerFactory.getLogger(PlugSim.class);
+
+	
 }

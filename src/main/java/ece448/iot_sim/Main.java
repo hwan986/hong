@@ -55,7 +55,7 @@ public class Main implements AutoCloseable {
 
 		MqttUpdates mqttUpd = new MqttUpdates(config.getMqttTopicPrefix());
 		for(PlugSim plug: plugs){
-			plug.addObserver((name, key, value_) -> {
+			plug.addObserver((name, key, value) -> {
 				try{
 					mqtt.publish(mqttUpd.getTopic(name, key), mqttUpd.getMessage(value));
 				} catch (Exception e){
