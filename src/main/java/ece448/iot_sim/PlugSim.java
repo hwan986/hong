@@ -26,7 +26,9 @@ public class PlugSim {
 	/**
 	 * Switch the plug on.
 	 */
-	
+	public static interface Observer{
+		void update(String name, String key, String value);
+	}
 	synchronized public void switchOn() {
 		// P1: add your code here
 		on = true;
@@ -101,6 +103,7 @@ public class PlugSim {
 	synchronized public double getPower() {
 		return power;
 	}
+
 
 	private static final Logger logger = LoggerFactory.getLogger(PlugSim.class);
 }
