@@ -40,6 +40,49 @@ public class MqttCommands {
 		logger.info("MqttCmd {}", topic);
 		// switch on/off/toggle here
 
+		String[] tokens = topic.split("/");
+		if (tokens.length != 4)
+			return; // ignore unknown format
+		
+        /*
+		String actionString = tokens[3];
+
+		if (actionString == null || actionString.isBlank()) {
+			return; // preempt
+			//topic = prefix/action/plugname/actionString 
+			// topic = prefix/update/plugname/
+		} else if (actionString.equals("on")) {
+
+		} else if (actionString.equals("off")) {
+
+		}
+		*/
+
+		// prefix/action/plugname/actionString
+		// iot_ece448/action/xx/on
+		PlugSim plug = plugs.get(tokens[3]);
+		if (plug == null)
+			return; // no such plug
+
+		String action = tokens[3];
+		if (action == null)
+			
+
+		if(action.equals("on"))
+		{
+			plug.switchOn();
+		   
+		}
+		if(action.equals("off"))
+		{
+			plug.switchOff();
+		     
+		}
+		if(action.equals("toggle"))
+		{
+			plug.toggle();
+		     
+		}
 		
 	}
 
