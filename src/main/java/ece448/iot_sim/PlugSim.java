@@ -106,7 +106,11 @@ public class PlugSim {
 
 	protected void updatePower(double p) {
 		power = p;
-		logger.debug("Plug {}: power {}", name, power);
+		//logger.debug("Plug {}: power {}", name, power);
+		logger.info("Plug {}: power {}", name, String.format("%.3f", power));
+		for(Observer observer: observers){
+			observer.update(name, "power", String.format("%.3f", power));
+		}
 	}
 
 	/**
