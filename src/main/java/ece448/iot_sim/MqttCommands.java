@@ -40,9 +40,13 @@ public class MqttCommands {
 		logger.info("MqttCmd {}", topic);
 		// switch on/off/toggle here
 
-		String[] tokens = topic.split("/");
-		if (tokens.length != 4)
+		String[] tokens = topic.substring(topicPrefix.length()+1).split("/");
+		
+
+		if ((tokens.length != 3) || !tokens[0].equals("action"))
 			return; // ignore unknown format
+
+		//if(tokens[2].equals)
 		
         /*
 		String actionString = tokens[3];
@@ -50,7 +54,8 @@ public class MqttCommands {
 		if (actionString == null || actionString.isBlank()) {
 			return; // preempt
 			//topic = prefix/action/plugname/actionString 
-			// topic = prefix/update/plugname/
+			// topic = prefix/update/plugname/Powercon
+			topic = prefix/update/plugname/Powerstamp
 		} else if (actionString.equals("on")) {
 
 		} else if (actionString.equals("off")) {
@@ -60,27 +65,32 @@ public class MqttCommands {
 
 		// prefix/action/plugname/actionString
 		// iot_ece448/action/xx/on
-		PlugSim plug = plugs.get(tokens[3]);
+		PlugSim plug = plugs.get(tokens[1]);
 		if (plug == null)
 			return; // no such plug
 
-		String action = tokens[3];
-		if (action == null)
+		String action = tokens[2];
+
+		logger.info("action {}", action);
+		//if (action == null)
 			
 
 		if(action.equals("on"))
 		{
 			plug.switchOn();
+			plug.measurePower();
 		   
 		}
 		if(action.equals("off"))
 		{
 			plug.switchOff();
+			plug.measurePower();
 		     
 		}
 		if(action.equals("toggle"))
 		{
 			plug.toggle();
+			plug.measurePower();
 		     
 		}
 		

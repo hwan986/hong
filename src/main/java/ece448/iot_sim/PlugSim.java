@@ -68,10 +68,10 @@ public class PlugSim {
 	synchronized public void toggle() {
 		// P1: add your code here
 		if(on){
-			on = false;
+			updateState(false);
 		}
 		else{
-			on = true;
+			updateState(true);
 		}
 	}
 

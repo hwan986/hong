@@ -48,6 +48,7 @@ public class Main implements AutoCloseable {
 		this.mqtt = new MqttClient(config.getMqttBroker(), config.getMqttClientId(), new MemoryPersistence());
 		this.mqtt.connect();
 
+		// start MQTT commands
 		MqttCommands mqttCmd = new MqttCommands(plugs, config.getMqttTopicPrefix());
 		logger.info("MQtt subscribe to {}", mqttCmd.getTopic());
 
