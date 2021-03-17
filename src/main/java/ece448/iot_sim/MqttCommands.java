@@ -46,22 +46,11 @@ public class MqttCommands {
 		if ((tokens.length != 3) || !tokens[0].equals("action"))
 			return; // ignore unknown format
 
-		//if(tokens[2].equals)
-		
-        /*
-		String actionString = tokens[3];
-
-		if (actionString == null || actionString.isBlank()) {
-			return; // preempt
+	
 			//topic = prefix/action/plugname/actionString 
 			// topic = prefix/update/plugname/Powercon
-			topic = prefix/update/plugname/Powerstamp
-		} else if (actionString.equals("on")) {
-
-		} else if (actionString.equals("off")) {
-
-		}
-		*/
+			//topic = prefix/update/plugname/Powerstamp
+		
 
 		// prefix/action/plugname/actionString
 		// iot_ece448/action/xx/on
@@ -72,57 +61,29 @@ public class MqttCommands {
 		String action = tokens[2];
 
 		logger.info("action {}", action);
-		//if (action == null)
 			
-
 		if(action.equals("on"))
 		{
 			plug.switchOn();
-			plug.measurePower();
+			
 		   
 		}
 		if(action.equals("off"))
 		{
 			plug.switchOff();
-			plug.measurePower();
+			
 		     
 		}
 		if(action.equals("toggle"))
 		{
 			plug.toggle();
-			plug.measurePower();
+			
 		     
 		}
 		
 	}
 
-	protected String listPlugs() {
-		StringBuilder sb = new StringBuilder();
 
-		sb.append("<html><body>");
-		for (String plugName: plugs.keySet())
-		{
-			sb.append(String.format("<p><a href='/%s'>%s</a></p>",
-				plugName, plugName));
-		}
-		sb.append("</body></html>");
-
-		return sb.toString();
-	}
-
-	protected String report(PlugSim plug) {
-		String name = plug.getName();
-		return String.format("<html><body>"
-			+"<p>Plug %s is %s.</p>"
-			+"<p>Power reading is %.3f.</p>"
-			+"<p><a href='/%s?action=on'>Switch On</a></p>"
-			+"<p><a href='/%s?action=off'>Switch Off</a></p>"
-			+"<p><a href='/%s?action=toggle'>Toggle</a></p>"
-			+"</body></html>",
-			name,
-			plug.isOn()? "on": "off",
-			plug.getPower(), name, name, name);
-	}
 
 	private static final Logger logger = LoggerFactory.getLogger(MqttCommands.class);
 }
