@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.jboss.logging.Message;
 import org.junit.Test;
 
 public class MqttCommandsTests {
@@ -172,52 +173,25 @@ public class MqttCommandsTests {
 
 		assertEquals(topic, "iot_ece448/action/#");
 	}
-
+     //MqttUpdate
 	@Test
 	public void test7() {
-		PlugSim a = new PlugSim("a");
+
+		MqttUpdates mqttUpd = new MqttUpdates("iot_ece448");
+		String result = mqttUpd.getTopic("a", "state");
 		
-
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
 		
-
-		HTTPCommands cmds = new HTTPCommands(list);
-
-		HashMap<String,String> params = new HashMap<>();
-		params.put("action", "to");
-
-		String result  = cmds.handleGet("/a", params);
-		
-		assertEquals(result,"<html><body></body></html>");
+		assertEquals(result,"iot_ece448/update/a/state");
 	}
 	
 	@Test
 	public void test8()  {
-		PlugSim a = new PlugSim("a.700");
+		MqttUpdates mqttUpd = new MqttUpdates("iot_ece448");
 		
 		
-	
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
 		
-		HTTPCommands cmds = new HTTPCommands(list);
-
-		HashMap<String,String> params = new HashMap<>();
 		
-		params.put("action", "on");
-		
-	
-
-		String result  = cmds.handleGet("/a.700", params);
-
-		//a.measurePower();
-		params.put("action","on");
-		result  = cmds.handleGet("/a.700", params);
-		//Thread.sleep(1500);
-		
-		//assertEquals(result,"");
-		assertTrue(result.indexOf("Power reading is 0.000") !=-1);
+		assertEquals(new String(mqttUpd.getMessage("on").getPayload()),"on");
 		
 	
 	}
