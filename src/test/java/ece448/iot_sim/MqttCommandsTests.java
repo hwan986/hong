@@ -14,15 +14,17 @@ public class MqttCommandsTests {
 	@Test
 	public void test0() {
 		PlugSim a = new PlugSim("a");
-		PlugSim x = new PlugSim("x");
+		
 
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
-		list.add(x);
-		String topic = "iot_ece448/action/a/off";
+		
+		
 		//String msg = "hello";
 
 		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		String topic = "iot_ece448/action/a/off";
+		
 		cmds.handleMessage(topic, MqttMessage);
 
 		HTTPCommands cmd = new HTTPCommands(list);
@@ -43,11 +45,18 @@ public class MqttCommandsTests {
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
+		String topic = "iot_ece448/action/a/on";
+		//String msg = "hello";
 
-		HTTPCommands cmds = new HTTPCommands(list);
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic, MqttMessage);
 
-		assertEquals(cmds.handleGet("/", new HashMap<>()), "<html><body><p><a href='/a'>a</a></p></body></html>");
-		//assertTrue(cmds.handleGet("/a", new HashMap<>()) != null);
+		HTTPCommands cmd = new HTTPCommands(list);
+
+		String result = cmd.handleGet("/a", new HashMap<>());
+
+
+		assertTrue(result.indexOf("Plug a is on") !=-1);
 	}
 
 	@Test
@@ -58,33 +67,47 @@ public class MqttCommandsTests {
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
+		String topic1 = "iot_ece448/action/a/on";
+		String topic2 = "iot_ece448/action/a/toggle";
+		//String msg = "hello";
 
-		HTTPCommands cmds = new HTTPCommands(list);
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic1, MqttMessage);
+		cmds.handleMessage(topic2, MqttMessage);
 
-		assertEquals(cmds.handleGet("//a", new HashMap<>()), null);
-		//assertTrue(cmds.handleGet("/a", new HashMap<>()) != null);
+		HTTPCommands cmd = new HTTPCommands(list);
+
+		String result = cmd.handleGet("/a", new HashMap<>());
+
+
+		assertTrue(result.indexOf("Plug a is off") !=-1);
+		
+	
 	}
 
 
 	
 @Test
 	public void test3() {
-		PlugSim a = new PlugSim("a");
+		PlugSim a = new PlugSim(" ");
 		
 
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
+		String topic = "iot_ece448/action//on";
+	
 
-		HTTPCommands cmds = new HTTPCommands(list);
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic, MqttMessage);
+		
 
-		HashMap<String,String> params = new HashMap<>();
-		params.put("action", "on");
+		HTTPCommands cmd = new HTTPCommands(list);
 
-		String result  = cmds.handleGet("/a", params);
-		assertTrue(result.indexOf("Plug a is on") !=-1 
-		&& result.indexOf("Power reading is 0.000") !=-1) ;
-		//assertEquals(result, "<html><body><p>Plug a is on.</p><p>Power reading is 0.000.</p><p><a href='/a?action=on'>Switch On</a></p><p><a href='/a?action=off'>Switch Off</a></p><p><a href='/a?action=toggle'>Toggle</a></p></body></html>");
+		String result = cmd.handleGet("/", new HashMap<>());
+
+		assertEquals(result,"<html><body><p><a href='/ '> </a></p></body></html>");
+		//assertTrue(result.indexOf("Plug a is off") !=-1);
 		
 	}
 	@Test
@@ -95,39 +118,43 @@ public class MqttCommandsTests {
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
+		String topic = "iot_ece448/action/a/b/c/on";
+	
 
-		HTTPCommands cmds = new HTTPCommands(list);
-
-		HashMap<String,String> params = new HashMap<>();
-		params.put("action", "off");
-
-		String result  = cmds.handleGet("/a", params);
-		assertTrue(result.indexOf("Plug a is off") !=-1 
-		&& result.indexOf("Power reading is 0.000") !=-1) ;
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic, MqttMessage);
 		
-		//assertEquals(result, "<html><body><p>Plug a is off.</p><p>Power reading is 0.000.</p><p><a href='/a?action=on'>Switch On</a></p><p><a href='/a?action=off'>Switch Off</a></p><p><a href='/a?action=toggle'>Toggle</a></p></body></html>");
+
+		HTTPCommands cmd = new HTTPCommands(list);
+
+		String result = cmd.handleGet("/a", new HashMap<>());
+
+		assertTrue(result.indexOf("Plug a is off") !=-1);
 		
 	}
 
 	@Test
 	public void test5() {
 		PlugSim a = new PlugSim("a");
-	
+		
 
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
+		
+		String topic = "iot_ece448/x/a/on";
 	
 
-		HTTPCommands cmds = new HTTPCommands(list);
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic, MqttMessage);
+		
 
-		HashMap<String,String> params = new HashMap<>();
-		params.put("action", null);
+		HTTPCommands cmd = new HTTPCommands(list);
 
-		String result  = cmds.handleGet("/a", params);
-		assertTrue(result.indexOf("Plug a is off") !=-1 ) ;
-		//assertEquals(result, "<html><body><p>Plug a is off.</p><p>Power reading is 0.000.</p><p><a href='/a?action=on'>Switch On</a></p><p><a href='/a?action=off'>Switch Off</a></p><p><a href='/a?action=toggle'>Toggle</a></p></body></html>");
+		String result = cmd.handleGet("/a", new HashMap<>());
+
+		assertTrue(result.indexOf("Plug a is off") !=-1);
 	}
-
+    //test6 getTopic
 	@Test
 	public void test6() {
 		PlugSim a = new PlugSim("a");
@@ -136,16 +163,14 @@ public class MqttCommandsTests {
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
-
-		HTTPCommands cmds = new HTTPCommands(list);
-
-		HashMap<String,String> params = new HashMap<>();
-		params.put("action", "toggle");
-
-		String result  = cmds.handleGet("/a", params);
 		
-		assertTrue(result.indexOf("Plug a is on") !=-1) ;
-		//assertEquals(result, "<html><body><p>Plug a is on.</p><p>Power reading is 0.000.</p><p><a href='/a?action=on'>Switch On</a></p><p><a href='/a?action=off'>Switch Off</a></p><p><a href='/a?action=toggle'>Toggle</a></p></body></html>");
+	
+
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		String topic = cmds.getTopic();
+		
+
+		assertEquals(topic, "iot_ece448/action/#");
 	}
 
 	@Test
