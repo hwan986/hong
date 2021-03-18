@@ -197,30 +197,24 @@ public class MqttCommandsTests {
 	}
 	@Test
 	public void test9()  {
-		PlugSim a = new PlugSim("a.700");
+		PlugSim a = new PlugSim("a");
 		
-		
-	
+
 		ArrayList<PlugSim> list = new ArrayList<>();
 		list.add(a);
 		
-		HTTPCommands cmds = new HTTPCommands(list);
+		String topic = "iot_ece448/action/b/on";
+		//String msg = "hello";
 
-		HashMap<String,String> params = new HashMap<>();
-		
-		params.put("action", "on");
-		
-	
+		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
+		cmds.handleMessage(topic, MqttMessage);
 
-		String result  = cmds.handleGet("/a.700", params);
+		HTTPCommands cmd = new HTTPCommands(list);
 
-		a.measurePower();
-		params.put("action","on");
-		result  = cmds.handleGet("/a.700", params);
-		//Thread.sleep(1500);
-		
-		//assertEquals(result,"");
-		assertTrue(result.indexOf("Power reading is 700.000") !=-1);
+		String result = cmd.handleGet("/a", new HashMap<>());
+
+
+		assertTrue(result.indexOf("Plug a is off") !=-1);
 		
 	
 	}
