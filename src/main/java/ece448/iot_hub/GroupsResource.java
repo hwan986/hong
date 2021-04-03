@@ -72,6 +72,7 @@ public class GroupsResource {
 		ret.put("members", groups.getGroupMembers(group));
 		return ret;
 	}
+	
 
 	private static final Logger logger = LoggerFactory.getLogger(GroupsResource.class);	
 }

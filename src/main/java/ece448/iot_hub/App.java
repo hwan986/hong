@@ -23,5 +23,6 @@ public class App {
 		logger.info("MqttClient {} connected: {}", clientID, broker);
 		return mqtt;
 	}
+	private static final Logger logger = LoggerFactory.getLogger(App.class);
 	
 }
