@@ -3,7 +3,7 @@ package ece448.iot_hub;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,30 +14,26 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
 
 @Component
 public class PlugsModel {
-	private HashMap<String, HashSet<String>> plugs = new HashMap<>();
+	private HashMap<String, Map<String,Object>> plugs = new HashMap<>();
+	//private final MqttController mqtt;
+	//private static final String broker = "tcp://127.0.0.1";
+	//private static final String topicPrefix = System.currentTimeMillis()+"/grade_p4/iot_ece448";
 
-	synchronized public List<String> getPlugs() {
-		return new ArrayList<>(plugs.keySet());
-	}
-
-	synchronized public List<String> getPlugMembers(String plug) {
-		HashSet<String> members = plugs.get(plug);
-		return (members == null)? new ArrayList<>(): new ArrayList<>(members);
-	}
-
-	synchronized public void setPlugMembers(String plug, List<String> members) {
-		plugs.put(plug, new HashSet<>(members));
-	}
-
-	synchronized public void removePlug(String plug) {
-		plugs.remove(plug);
-	}
+	//public PlugsModel()throws Exception{
+		//this.mqtt = new MqttController(broker, "grader/iot_hub", topicPrefix);
+		//this.mqtt.start();
+	//}
+	
+	//public void close() throws Exception {
+	//	mqtt.close();
+	//}
 
 	public static class MqttController {
 		private final String broker;
@@ -123,18 +119,95 @@ public class PlugsModel {
 		private static final Logger logger = LoggerFactory.getLogger(MqttController.class);
 		}
 	
-	private static final String broker = "tcp://127.0.0.1";
-	private static final String topicPrefix = System.currentTimeMillis()+"/grade_p4/iot_ece448";
-
+	//private static final String broker = "tcp://127.0.0.1";
+	//private static final String topicPrefix = System.currentTimeMillis()+"/grade_p4/iot_ece448";
 	private final MqttController mqtt;
 
-	private PlugsModel() throws Exception {
-		this.mqtt = new MqttController(broker, "grader/iot_sim", topicPrefix);
+	
+		private PlugsModel(Environment env) throws Exception {
+		String broker = env.getProperty("mqtt.broker");
+		String clientID = env.getProperty("mqtt.clientId");
+		String topicPrefix = env.getProperty("mqtt.topicPrefix");
+		this.mqtt = new MqttController(broker, clientID, topicPrefix);
 		this.mqtt.start();
 	}
-		
+            
 	
 	public void close() throws Exception {
 		mqtt.close();
 	}
+
+	synchronized public List<String> getPlugs() {
+		return new ArrayList<>(plugs.keySet());
+	}
+
+	/*synchronized public List<String> getPlugMembers(String plug) {
+		HashSet<String> members = (HashSet<String>) plugs.get(plug);
+		return (members == null)? new ArrayList<>(): new ArrayList<>(members);
+	}
+	*/
+
+	synchronized public void setPlug(String plugName, String action) throws Exception {
+		Map<String,Object> plugProperties = new HashMap<>();
+		plugProperties.put("name", plugName);
+		if(action.equals("on")){
+			plugProperties.put("state", "on");
+		}
+		if(action.equals("off")){
+			plugProperties.put("state", "off");
+		}
+		if(action.equals("toggle")){
+			if(getPlugState(plugName) == true ){
+				plugProperties.put("state", "off");
+			}
+			else {
+				plugProperties.put("state", "on");
+			}
+		}
+		//plugProperties.put("state", on);
+		//plugProperties.put("power", power);
+		
+		plugs.put(plugName, plugProperties);
+		//mqtt.publishAction(plugName, on);
+	}
+
+	synchronized public void removePlug(String plug) {
+		plugs.remove(plug);
+	}
+
+	synchronized public boolean getPlugState(String plugName) throws Exception {
+		
+		Map<String,Object> plugProperties = plugs.get(plugName);
+		
+		if(plugProperties == null) {
+			throw new Exception("no plugsName " + plugName);
+		}
+		
+		return plugProperties.get("on") == Boolean.TRUE;
+	}
+
+	synchronized public void updateState(String plug, String action) {
+		mqtt.publishAction(plug, action);
+		
+	}
+	//private static final List<String> allPlugNames = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
+
+	
+
+	/*static String getStates(MqttController mqtt) throws Exception {
+	mqtt.getStates();
+		TreeMap<String, String> states = new TreeMap<>();
+		for (String name: allPlugNames)
+		{
+			states.put(name, "off".equals(mqtt.getState(name))? "0": "1");
+		}
+		String ret = String.join("", states.values());
+		logger.debug("GradeP4: getState4 {}", ret);
+		return ret;
+	}
+	*/
+	
+//	private static final Logger logger = LoggerFactory.getLogger(PlugsModel.class);
+	
+	
 }

@@ -76,3 +76,6 @@ task iot_hub(type: JavaExec, dependsOn: [test, jacocoTestReport]) {
 jacoco {
 	toolVersion = '0.8.5'
 }
+springBoot{
+	mainClass ="ece448.iot_hub.Main"
+}
