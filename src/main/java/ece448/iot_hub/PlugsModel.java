@@ -146,44 +146,47 @@ public class PlugsModel {
 		return (members == null)? new ArrayList<>(): new ArrayList<>(members);
 	}
 	*/
+	synchronized private Map<String,Object> createOrGetPlug(String plugName, boolean isOn){
 
-	synchronized public void setPlug(String plugName, String action) throws Exception {
-		Map<String,Object> plugProperties = new HashMap<>();
+		Map<String,Object> plugProperties = plugs.get(plugName);
+		if(plugProperties == null){
+			plugProperties = new HashMap<>();
+			plugProperties.put("state", isOn? "on":"off");
+		}
+		
+
 		plugProperties.put("name", plugName);
-		if(action.equals("on")){
-			plugProperties.put("state", "on");
-		}
-		if(action.equals("off")){
-			plugProperties.put("state", "off");
-		}
-		if(action.equals("toggle")){
-			if(getPlugState(plugName) == true ){
-				plugProperties.put("state", "off");
-			}
-			else {
-				plugProperties.put("state", "on");
-			}
-		}
-		//plugProperties.put("state", on);
-		//plugProperties.put("power", power);
 		
 		plugs.put(plugName, plugProperties);
-		//mqtt.publishAction(plugName, on);
+		return plugProperties;
+	}
+
+	   
+
+	synchronized public void setPlug(String plugName, String action)  {
+		boolean isOn = action.equals("on");
+		Map<String,Object> plugProperties = createOrGetPlug(plugName,isOn);
+		
+		if(action.equals("on")){
+			plugProperties.put("state","on");
+		}
+		else if(action.equals("off")){
+			plugProperties.put("state","off");
+		}
+		else if(action.equals("toggle")){
+			plugProperties.put("state", plugProperties.get("state").equals("on")? "off":"on");	
+		}
 	}
 
 	synchronized public void removePlug(String plug) {
 		plugs.remove(plug);
 	}
 
-	synchronized public boolean getPlugState(String plugName) throws Exception {
+	synchronized public boolean getPlugState(String plugName) {
 		
-		Map<String,Object> plugProperties = plugs.get(plugName);
+		Map<String,Object> plugProperties = createOrGetPlug(plugName, false);
 		
-		if(plugProperties == null) {
-			throw new Exception("no plugsName " + plugName);
-		}
-		
-		return plugProperties.get("on") == Boolean.TRUE;
+		return plugProperties.get("state").equals("on") ;
 	}
 
 	synchronized public void updateState(String plug, String action) {

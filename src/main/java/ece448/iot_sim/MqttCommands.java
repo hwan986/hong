@@ -40,23 +40,24 @@ public class MqttCommands {
 		logger.info("MqttCmd {}", topic);
 		// switch on/off/toggle here
 
-		String[] tokens = topic.substring(topicPrefix.length()+1).split("/");
-		
+		try{
+			String[] tokens = topic.substring(topicPrefix.length()+1).split("/");
+	
 
 		if ((tokens.length != 3) || !tokens[0].equals("action"))
+		try{
 			return; // ignore unknown format
-
-	
-			//topic = prefix/action/plugname/actionString 
-			// topic = prefix/update/plugname/Powercon
-			//topic = prefix/update/plugname/Powerstamp
+		} catch(Exception e){
+			logger.info("NullPointerException");
+		}	
 		
-
-		// prefix/action/plugname/actionString
-		// iot_ece448/action/xx/on
 		PlugSim plug = plugs.get(tokens[1]);
 		if (plug == null)
+		try{
 			return; // no such plug
+		} catch(Exception e){
+			logger.info("NullPointerException");
+		}
 
 		String action = tokens[2];
 
@@ -64,8 +65,7 @@ public class MqttCommands {
 			
 		if(action.equals("on"))
 		{
-			plug.switchOn();
-			
+			plug.switchOn();	
 		   
 		}
 		if(action.equals("off"))
@@ -80,10 +80,11 @@ public class MqttCommands {
 			
 		     
 		}
-		
+	} catch(Exception e){
+		logger.info("NullPointerException");
+
 	}
-
-
+	}
 
 	private static final Logger logger = LoggerFactory.getLogger(MqttCommands.class);
 }

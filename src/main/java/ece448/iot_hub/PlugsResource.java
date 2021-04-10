@@ -45,34 +45,24 @@ public class PlugsResource {
 		@RequestParam(value = "action", required = false) String action) throws Exception  {
 		if (action == null) {
 			Object ret;
-			try {
-				ret = makePlug(plug, plugs.getPlugState(plug));
-			} catch (Exception e) {
-				
-				return null;
-			}
+			ret = makePlug(plug, plugs.getPlugState(plug));
 			logger.info("Plug {}: {}", plug, ret);
 			return ret;
 		}
 		plugs.updateState(plug, action);
+		plugs.setPlug(plug, action);
 		// modify code below to control plugs by publishing messages to MQTT broker
 		//List<String> members = plugs.getPlugMembers(plug);
 		logger.info("Plug {}: action {}, {}", plug, action);
-		return plugs;// not null
+		return makePlug(plug, plugs.getPlugState(plug));// not null
 	}
 
 	@PostMapping("/api/plugs/{plug:.+}")
 	public void createPlug(
 		@PathVariable("plug") String plug,
-		@RequestBody String action
-		//@RequestBody String power
-		) throws Exception {
-			plugs.setPlug(plug, action);
-			logger.info("Plug {}: created {},{}", plug, action);
-			/*
-		plugs.setPlug(plug, members);
-		logger.info("Plug {}: created {}", plug, members);
-		*/
+		@RequestBody String action) throws Exception {
+		plugs.setPlug(plug, action);
+		logger.info("Plug {}: created {},{}", plug, action);
 	}
 
 	@DeleteMapping("/api/plugs/{plug:.+}")
