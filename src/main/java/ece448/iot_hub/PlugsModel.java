@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PlugsModel {
+	
 	private HashMap<String, Map<String,Object>> plugs = new HashMap<>();
 	//private final MqttController mqtt;
 	//private static final String broker = "tcp://127.0.0.1";
@@ -130,6 +131,7 @@ public class PlugsModel {
 		String topicPrefix = env.getProperty("mqtt.topicPrefix");
 		this.mqtt = new MqttController(broker, clientID, topicPrefix);
 		this.mqtt.start();
+		
 	}
             
 	
@@ -189,8 +191,9 @@ public class PlugsModel {
 		return plugProperties.get("state").equals("on") ;
 	}
 
-	synchronized public void updateState(String plug, String action) {
+	synchronized public void publishState(String plug, String action) {
 		mqtt.publishAction(plug, action);
+		
 		
 	}
 	//private static final List<String> allPlugNames = Arrays.asList("a", "b", "c", "d", "e", "f", "g");
