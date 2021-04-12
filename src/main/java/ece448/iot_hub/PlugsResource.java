@@ -6,8 +6,9 @@ import java.util.HashMap;
 //import java.util.List;
 //import java.util.Map;
 //import java.util.TreeMap;
-//import ece448.iot_hub.PlugsModel.MqttController;
+import ece448.iot_hub.PlugsModel.MqttController;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,18 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlugsResource {
 
 	private final PlugsModel plugs;
+	//private final MqttMessage mqtt;
 	//private final MqttController mqtt;
 
 	public PlugsResource(PlugsModel plugs) {
 		this.plugs = plugs;
-	//	this.mqtt = mqtt;
+		
 	}
 	
 	@GetMapping("/api/plugs")
 	public Collection<Object> getPlugs() throws Exception {
 		ArrayList<Object> ret = new ArrayList<>();
 		for (String plug: plugs.getPlugs()) {
-			ret.add(makePlug(plug, plugs.getPlugState(plug)));
+			ret.add(makePlug(plug));
 		}
 		logger.info("Plugs: {}", ret);
 		return ret;
@@ -45,20 +47,23 @@ public class PlugsResource {
 		@RequestParam(value = "action", required = false) String action) throws Exception  {
 		if (action == null) {
 			Object ret;
-			ret = makePlug(plug, plugs.getPlugState(plug));
-			plugs.publishState(plug, action);
+			ret = makePlug(plug);
+			
 			logger.info("Plug {}: {}", plug, ret);
 			return ret;
 			
 		}
 	
-		plugs.setPlug(plug, action);
+		
 		plugs.publishState(plug, action);
+		
 		
 		// modify code below to control plugs by publishing messages to MQTT broker
 		//List<String> members = plugs.getPlugMembers(plug);
-		logger.info("Plug {}: action {}, {}", plug, action);
-		return makePlug(plug, plugs.getPlugState(plug));// not null
+		logger.info("Plug {}: action {}, model {}", plug,  plugs.getState(plug));
+		return makePlug(plug); //not null
+		 //plugs.getState(); 
+		
 	
 	}
 
@@ -78,7 +83,25 @@ public class PlugsResource {
 	}
 	*/
 
-	protected Object makePlug(String plug, boolean isOn) {
+
+	protected Object makePlug(String plug) {
+		// modify code below to include plug states
+		HashMap<String, Object> ret = new HashMap<>();
+		//HashMap<String, Object> abs = new HashMap<>();
+		
+		ret.put("name", plug);
+		//ret.put("state","off");
+		
+		ret.put("state", plugs.getState(plug));
+		if(plug.indexOf(".") != -1)
+		{
+			ret.put("power", Integer.parseInt(plug.split("\\.")[1]));
+		}
+		ret.put("power", "0");
+		logger.info("Plug {}: state {}, power {}", plug, plugs.getState(plug), ret.get("power"));
+		return ret;
+	}
+		/*protected Object makePlug(String plug, boolean isOn) {
 		// modify code below to include plug states
 		HashMap<String, Object> ret = new HashMap<>();
 		
@@ -90,39 +113,13 @@ public class PlugsResource {
 			ret.put("power", Integer.parseInt(plug.split("\\.")[1]));
 		}
 		ret.put("power", "0");
-		return ret;
-	}
-	
-
-		
-	/*protected Object makePlug(String plug, String action) {
-		// modify code below to include plug states
-		HashMap<String, Object> ret = new HashMap<>();
-
-		
-		
-		ret.put("name", plug);
-		//ret.put("state","off");
-		//ret.put("state", isOn ? "on" : "off");
-		if(plug.indexOf(".") != -1)
-		{
-			ret.put("power", Integer.parseInt(plug.split("\\.")[1]));
-		}
-		ret.put("power", "0");
-
-		if(action.equals("on")){
-			ret.put("state","on");
-		}
-		else if(action.equals("off")){
-			ret.put("state","off");
-		}
-		else if(action.equals("toggle")){
-			ret.put("state", ret.get("state").equals("on")? "off":"on");	
-		}
-	
+		logger.info("Plug {}: state {}, {}", plug,  isOn ? "on" : "off", plugs.getState3());
 		return ret;
 	}
 */
+
+		
+
 
 
 	private static final Logger logger = LoggerFactory.getLogger(PlugsResource.class);	
