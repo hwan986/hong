@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 //import java.util.List;
+
+//import java.util.List;
 //import java.util.Map;
 //import java.util.TreeMap;
-import ece448.iot_hub.PlugsModel.MqttController;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.DeleteMapping;
+//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlugsResource {
 
 	private final PlugsModel plugs;
-	//private final MqttMessage mqtt;
-	//private final MqttController mqtt;
 
 	public PlugsResource(PlugsModel plugs) {
 		this.plugs = plugs;
@@ -60,21 +60,22 @@ public class PlugsResource {
 		
 		// modify code below to control plugs by publishing messages to MQTT broker
 		//List<String> members = plugs.getPlugMembers(plug);
-		logger.info("Plug {}: action {}, model {}", plug,  plugs.getState(plug));
+		logger.info("Plug {}: state =  {}, action ={} ", plug,  plugs.getState(plug), action);
 		return makePlug(plug); //not null
-		 //plugs.getState(); 
 		
 	
 	}
 
-	/*@PostMapping("/api/plugs/{plug:.+}")
+	/*
+	@PostMapping("/api/plugs/{plug:.+}")
 	public void createPlug(
 		@PathVariable("plug") String plug,
-		@RequestBody String action) throws Exception {
-		plugs.setPlug(plug, action);
-		logger.info("Plug {}: created {},{}", plug, action);
+		@RequestBody List<String> members)  {
+		plugs.setPlugMembers(plug, members);
+		logger.info("Plug {}: created {},{}", plug, members);
 	}
 
+	
 	@DeleteMapping("/api/plugs/{plug:.+}")
 	public void removePlug(
 		@PathVariable("plug") String plug) {
@@ -87,12 +88,10 @@ public class PlugsResource {
 	protected Object makePlug(String plug) {
 		// modify code below to include plug states
 		HashMap<String, Object> ret = new HashMap<>();
-		//HashMap<String, Object> abs = new HashMap<>();
 		
 		ret.put("name", plug);
-		//ret.put("state","off");
-		
 		ret.put("state", plugs.getState(plug));
+
 		if(plug.indexOf(".") != -1)
 		{
 			ret.put("power", Integer.parseInt(plug.split("\\.")[1]));
