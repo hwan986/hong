@@ -1,12 +1,18 @@
 package ece448.iot_hub;
 
+
+
 import static org.junit.Assert.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.junit.Test;
+
+import ece448.iot_sim.PlugSim;
 
 public class ServerBackendTests {
 
@@ -16,118 +22,69 @@ public class ServerBackendTests {
 	private final MqttController mqtt;
 	private static final MqttMessage msg = new MqttMessage();
 
+	
 	public ServerBackendTests() throws Exception{
 		this.mqtt = new MqttController(broker, clientId, topicPrefix);
 		this.mqtt.start();
 	}
- /*
+ 
 	@Test
 	public void test0() {
 		//PlugsModel plugs;
 		//PlugsResource ret = new PlugsResource(plugs);
-		mqtt.publishAction("a", "on");
-		assertEquals(mqtt.getState("a"), "on");
-
-		//assertEquals(cmds.handleGet("/b", new HashMap<>()), null);
-		//assertTrue(cmds.handleGet("/a", new HashMap<>()) != null);
+		mqtt.publishAction("a", "on");		
+		byte[] ret = msg.getPayload();
+		String s = new String(ret, StandardCharsets.UTF_8);
+		
+		assertEquals(s, "");
+	
 	}
 
-	/*
+	
 	@Test
 	public void test1() {
-		PlugSim a = new PlugSim("a");
+		String topic = topicPrefix +"/update/a/state";
+		mqtt.publishAction("a", "on");
 		
+		mqtt.handleUpdate(topic, new MqttMessage("on".getBytes()));
 
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
-		
-		String topic = "iot_ece448/action/a/on";
-		//String msg = "hello";
+		assertEquals(mqtt.getState("a"), "on");
 
-		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
-		cmds.handleMessage(topic, MqttMessage);
-
-		HTTPCommands cmd = new HTTPCommands(list);
-
-		String result = cmd.handleGet("/a", new HashMap<>());
-
-
-		assertTrue(result.indexOf("Plug a is on") !=-1);
 	}
 
 	@Test
 	public void test2() {
-		PlugSim a = new PlugSim("a");
+		String topic = topicPrefix +"/update/a/state";
+		mqtt.publishAction("a", "on");
+		mqtt.handleUpdate(topic, new MqttMessage("on".getBytes()));
+		TreeMap<String, String> ret = new TreeMap<>();
+		ret.put("a","on");
+		assertEquals(mqtt.getStates(), ret);
 		
-
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
-		
-		String topic1 = "iot_ece448/action/a/on";
-		String topic2 = "iot_ece448/action/a/toggle";
-		//String msg = "hello";
-
-		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
-		cmds.handleMessage(topic1, MqttMessage);
-		cmds.handleMessage(topic2, MqttMessage);
-
-		HTTPCommands cmd = new HTTPCommands(list);
-
-		String result = cmd.handleGet("/a", new HashMap<>());
-
-
-		assertTrue(result.indexOf("Plug a is off") !=-1);
-		
-	
 	}
 
 
 	
 @Test
 	public void test3() {
-		PlugSim a = new PlugSim(" ");
-		
-
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
-		
-		String topic = "iot_ece448/action//on";
-	
-
-		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
-		cmds.handleMessage(topic, MqttMessage);
-		
-
-		HTTPCommands cmd = new HTTPCommands(list);
-
-		String result = cmd.handleGet("/", new HashMap<>());
-
-		assertEquals(result,"<html><body><p><a href='/ '> </a></p></body></html>");
-		//assertTrue(result.indexOf("Plug a is off") !=-1);
+		String topic = topicPrefix +"/update/a/power";
+		mqtt.publishAction("a", "on");
+		mqtt.handleUpdate(topic, new MqttMessage("200".getBytes()));
+		assertEquals(mqtt.getPower("a"), "200");
 		
 	}
+	
 	@Test
 	public void test4() {
-		PlugSim a = new PlugSim("a");
-		
-
-		ArrayList<PlugSim> list = new ArrayList<>();
-		list.add(a);
-		
-		String topic = "iot_ece448/action/a/b/c/on";
-	
-
-		MqttCommands cmds = new MqttCommands(list, "iot_ece448");
-		cmds.handleMessage(topic, MqttMessage);
-		
-
-		HTTPCommands cmd = new HTTPCommands(list);
-
-		String result = cmd.handleGet("/a", new HashMap<>());
-
-		assertTrue(result.indexOf("Plug a is off") !=-1);
+		String topic = topicPrefix +"/update/a/power";
+		mqtt.publishAction("a", "on");
+		mqtt.handleUpdate(topic, new MqttMessage("200".getBytes()));
+		TreeMap<String, String> ret = new TreeMap<>();
+		ret.put("a","200");
+		assertEquals(mqtt.getPowers(), ret);
 		
 	}
+	/*
 	@Test
 	public void test5()  {
 		PlugSim a = new PlugSim("a");
@@ -151,7 +108,7 @@ public class ServerBackendTests {
 		
 	
 	}
-
+/*
 	@Test
 	public void test6() {
 		PlugSim a = new PlugSim("a");
