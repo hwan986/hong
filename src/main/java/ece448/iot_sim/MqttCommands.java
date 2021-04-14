@@ -44,46 +44,36 @@ public class MqttCommands {
 			String[] tokens = topic.substring(topicPrefix.length()+1).split("/");
 	
 
-		if ((tokens.length != 3) || !tokens[0].equals("action"))
-		try{
-			return; // ignore unknown format
-		} catch(Exception e){
-			logger.info("NullPointerException");
-		}	
+			if ((tokens.length != 3) || !tokens[0].equals("action"))
+				return; // ignore unknown format
+
+		 	PlugSim plug = plugs.get(tokens[1]);
+		 	if (plug == null)
+				return; // no such plug
 		
-		PlugSim plug = plugs.get(tokens[1]);
-		if (plug == null)
-		try{
-			return; // no such plug
+
+		 	String action = tokens[2];
+
+			logger.info("action {}", action);
+			
+		 	if(action.equals("on"))
+		 	{
+				plug.switchOn();	
+		    }
+		 
+			if(action.equals("off"))
+		 	{
+				plug.switchOff();
+			}
+
+		 	if(action.equals("toggle"))
+		 	{	
+				plug.toggle();
+			}
+
 		} catch(Exception e){
 			logger.info("NullPointerException");
 		}
-
-		String action = tokens[2];
-
-		logger.info("action {}", action);
-			
-		if(action.equals("on"))
-		{
-			plug.switchOn();	
-		   
-		}
-		if(action.equals("off"))
-		{
-			plug.switchOff();
-			
-		     
-		}
-		if(action.equals("toggle"))
-		{
-			plug.toggle();
-			
-		     
-		}
-	} catch(Exception e){
-		logger.info("NullPointerException");
-
-	}
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(MqttCommands.class);

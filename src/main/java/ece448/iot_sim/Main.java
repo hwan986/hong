@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,8 +60,13 @@ public class Main implements AutoCloseable {
 			plug.addObserver((name, key, value) -> {
 				try{
 					mqtt.publish(mqttUpd.getTopic(name, key), mqttUpd.getMessage(value));
-				} catch (Exception e){
-				logger.error("fail to publish {} {} {}", name, key, value, e);
+				} 
+				catch (MqttException me) {
+					logger.error(me.getMessage());
+					me.printStackTrace(System.out);
+				}
+				catch (Exception e){
+					logger.error("fail to publish {} {} {}", name, key, value, e);
 				}
 			});
 		}
