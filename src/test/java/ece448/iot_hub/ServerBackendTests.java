@@ -1,29 +1,16 @@
 package ece448.iot_hub;
 
-
-
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.core.env.Environment;
-import org.apache.catalina.TomcatPrincipal;
-import org.apache.http.client.fluent.Request;
-import org.springframework.stereotype.Component;
 
 
-import ece448.iot_sim.PlugSim;
-import ece448.iot_sim.SimConfig;
-
-//@Component
 public class ServerBackendTests {
 
 
@@ -33,14 +20,12 @@ public class ServerBackendTests {
 	private final MqttController mqtt;
 	private static final MqttMessage msg = new MqttMessage();
 	
-
-
-	//private static PlugsModel plugs;
+	
 	public ServerBackendTests() throws Exception{
-		this.mqtt = new MqttController(broker, clientId, topicPrefix);
 		
+		this.mqtt = new MqttController(broker, clientId, topicPrefix);
 		this.mqtt.start();
-		//this.plugs = plugs;
+		
 	}
 	
 	@Test
@@ -57,9 +42,8 @@ public class ServerBackendTests {
 	
 	@Test
 	public void test1() {
+		
 		String topic = topicPrefix +"/update/a/state";
-		
-		
 		mqtt.handleUpdate(topic, new MqttMessage("on".getBytes()));
 
 		assertEquals(mqtt.getState("a"), "on");
@@ -68,11 +52,13 @@ public class ServerBackendTests {
 
 	@Test
 	public void test2() {
+		
 		String topic = topicPrefix +"/update/a/state";
 		
 		mqtt.handleUpdate(topic, new MqttMessage("on".getBytes()));
 		TreeMap<String, String> ret = new TreeMap<>();
 		ret.put("a","on");
+		
 		assertEquals(mqtt.getStates(), ret);
 		
 	}
@@ -81,29 +67,36 @@ public class ServerBackendTests {
 	
 @Test
 	public void test3() {
+		
 		String topic = topicPrefix +"/update/a/power";
 		
 		mqtt.handleUpdate(topic, new MqttMessage("200".getBytes()));
+		
 		assertEquals(mqtt.getPower("a"), "200");
 		
 	}
 	
 	@Test
 	public void test4() {
+		
 		String topic = topicPrefix +"/update/a/power";
 		
 		mqtt.handleUpdate(topic, new MqttMessage("200".getBytes()));
 		TreeMap<String, String> ret = new TreeMap<>();
 		ret.put("a","200");
+		
 		assertEquals(mqtt.getPowers(), ret);
 		
 	}
 	
 	@Test
 	public void test5()  {
+		
 		String topic = topicPrefix +"/action/a/power";
+		
 		mqtt.handleUpdate(topic, new MqttMessage("200".getBytes()));
 		TreeMap<String, String> ret = new TreeMap<>();
+		
 		assertEquals(mqtt.getPowers(), ret);
 		
 	
@@ -111,58 +104,58 @@ public class ServerBackendTests {
 
 	@Test
 	public void test6() throws Exception {
+		
+		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
+		PlugsResource ret = new PlugsResource(plugs);
+		
+		ret.createPlug("plug1", Arrays.asList("a","b","c"));
+		mqtt.publishAction("a", "on");
+		
+		ret.getPlugs();
 		mqtt.close();
 	}
 	
 	
-    //test6 getTopic
+    
 	@Test
-	public void test7() throws Exception {		
-		//String broker = env.getProperty("mqtt.broker");
-		//String clientID = env.getProperty("mqtt.clientId");
-		//		
-			
-			
-		
+	public void test7() throws Exception {									
 		
 		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
 		PlugsResource ret = new PlugsResource(plugs);
+		
 		ret.createPlug("plug1", Arrays.asList("a","b","c"));
 		mqtt.publishAction("a", "on");
+		
 		ret.getPlug("a", "on");
-		ret.getPlugs();
 		plugs.close();
-
-		//ret.getPlug("a", "on");
-		//plugs.getPlugs();
-		//ret.getPlugs();
+		
 	}
 	
-	
-	//MqttUpdate
 	@Test
 	public void test8() throws Exception {
 
 		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
 		PlugsResource ret = new PlugsResource(plugs);
+		
 		ret.createPlug("plug1", Arrays.asList("a","b","c"));
 		mqtt.publishAction("a", "on");
+		
 		ret.getPlug("a", null);
 		ret.getPlugs();
 	}
 	
 	@Test
 	public void test9() throws Exception  {
+		
 		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
 		PlugsResource ret = new PlugsResource(plugs);
+		
 		ret.createPlug("plug1", Arrays.asList("a","b","c"));
 		mqtt.publishAction("a", "on");
+		
 		ret.getPlug("a.500", "");
 		ret.getPlugs();
 	
 	}
-
-
-
 
 }
