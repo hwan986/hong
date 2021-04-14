@@ -26,7 +26,7 @@ import ece448.iot_sim.SimConfig;
 //@Component
 public class ServerBackendTests {
 
-/*
+
 	private static final String broker = "tcp://127.0.0.1";
 	private static final String clientId = "iot_hub";
 	private static final String topicPrefix = "iot_ece448";
@@ -114,7 +114,7 @@ public class ServerBackendTests {
 		mqtt.close();
 	}
 	
-	/*
+	
     //test6 getTopic
 	@Test
 	public void test7() throws Exception {		
@@ -131,36 +131,38 @@ public class ServerBackendTests {
 		mqtt.publishAction("a", "on");
 		ret.getPlug("a", "on");
 		ret.getPlugs();
+		plugs.close();
 
 		//ret.getPlug("a", "on");
 		//plugs.getPlugs();
 		//ret.getPlugs();
 	}
 	
-	/*
+	
 	//MqttUpdate
 	@Test
-	public void test8() {
+	public void test8() throws Exception {
 
-		MqttUpdates mqttUpd = new MqttUpdates("iot_ece448");
-		String result = mqttUpd.getTopic("a", "state");
-		
-		
-		assertEquals(result,"iot_ece448/update/a/state");
+		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
+		PlugsResource ret = new PlugsResource(plugs);
+		ret.createPlug("plug1", Arrays.asList("a","b","c"));
+		mqtt.publishAction("a", "on");
+		ret.getPlug("a", null);
+		ret.getPlugs();
 	}
 	
 	@Test
-	public void test9()  {
-		MqttUpdates mqttUpd = new MqttUpdates("iot_ece448");
-		
-		
-		
-		
-		assertEquals(new String(mqttUpd.getMessage("on").getPayload()),"on");
-		
+	public void test9() throws Exception  {
+		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
+		PlugsResource ret = new PlugsResource(plugs);
+		ret.createPlug("plug1", Arrays.asList("a","b","c"));
+		mqtt.publishAction("a", "on");
+		ret.getPlug("a.500", "");
+		ret.getPlugs();
 	
 	}
 
-*/
+
+
 
 }

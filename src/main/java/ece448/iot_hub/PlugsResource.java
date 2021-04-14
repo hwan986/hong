@@ -55,12 +55,12 @@ public class PlugsResource {
 		
 		}
 	
-		plugs.publishState(plug, action);
+			plugs.publishState(plug, action);
 		
-		// modify code below to control plugs by publishing messages to MQTT broker
-		//List<String> members = plugs.getPlugMembers(plug);
-		logger.info("Plug {}: state =  {}, action ={} ", plug,  plugs.getState(plug), action);
-		return makePlug(plug); //not null	
+			// modify code below to control plugs by publishing messages to MQTT broker
+			//List<String> members = plugs.getPlugMembers(plug);
+			logger.info("Plug {}: state =  {}, action ={} ", plug,  plugs.getState(plug), action);
+			return makePlug(plug); //not null	
 	}
 
 
@@ -72,7 +72,7 @@ public class PlugsResource {
 		logger.info("Plug {}: created {},{}", plug, members);
 	}
 
-	
+	/*
 	@DeleteMapping("/api/plugs/{plug:.+}")
 	public void removePlug(
 		@PathVariable("plug") String plug) {
@@ -80,7 +80,7 @@ public class PlugsResource {
 		logger.info("Plug {}: removed", plug);
 	}
 	
-
+*/
 
 	protected Object makePlug(String plug) {
 		// modify code below to include plug states

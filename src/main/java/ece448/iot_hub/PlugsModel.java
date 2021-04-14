@@ -24,6 +24,7 @@ public class PlugsModel implements AutoCloseable {
 			//String broker = env.getProperty("mqtt.broker");
 			//String clientID = env.getProperty("mqtt.clientId");
 			//String topicPrefix = env.getProperty("mqtt.topicPrefix");
+			//
 			this.mqtt = new MqttController(broker, clientID, topicPrefix);
 			this.mqtt.start();	
 		}
@@ -46,9 +47,11 @@ public class PlugsModel implements AutoCloseable {
 	
 		*/
 
+		/*
 		synchronized public void removePlug(String plug) {
 			plugs.remove(plug);
 		}
+		*/
 
 
 		synchronized public void publishState(String plug, String action) {

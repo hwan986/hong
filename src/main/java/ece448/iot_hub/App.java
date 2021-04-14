@@ -13,9 +13,9 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class App {	
-	
+
 	@Bean
-	public PlugsModel plugModel(Environment env) throws Exception{
+	public PlugsModel plugsModel(Environment env) throws Exception{
 		String broker = env.getProperty("mqtt.broker");
 		String clientID = env.getProperty("mqtt.clientId");
 		String topicPrefix = env.getProperty("mqtt.topicPrefix");
@@ -28,14 +28,14 @@ public class App {
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 			
 }
-
 /*
+
 @SpringBootApplication
 public class App {
 }
 
 
-*/
+
 	/*
 	@Bean (destroyMethod = "disconnect")
 	public MqttClient mqttClient(Environment env) throws Exception{
