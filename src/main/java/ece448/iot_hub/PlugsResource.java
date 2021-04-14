@@ -52,12 +52,10 @@ public class PlugsResource {
 			
 			logger.info("Plug {}: {}", plug, ret);
 			return ret;
-			
+		
 		}
 	
-		
 		plugs.publishState(plug, action);
-		
 		
 		// modify code below to control plugs by publishing messages to MQTT broker
 		//List<String> members = plugs.getPlugMembers(plug);

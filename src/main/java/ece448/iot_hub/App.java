@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 public class App {	
+	
 	@Bean
 	public PlugsModel plugModel(Environment env) throws Exception{
 		String broker = env.getProperty("mqtt.broker");
@@ -34,21 +35,6 @@ public class App {
 }
 
 
-/*
-private final String broker1;
-    private final String clientId1;
-	private final String topicPrefix1;
-	public App(String broker1, String clientId1,String topicPrefix1) throws Exception{
-		this.broker1 = broker1;
-		this.clientId1 = clientId1;
-		this.topicPrefix1 = topicPrefix1;
-		broker1 = env.getProperty("mqtt.broker");
-		clientId1 = env.getProperty("mqtt.clientId");
-		topicPrefix1 = env.getProperty("mqtt.clientId");
-		synchronized public String getState() {
-        return broekr1
-    }
-	}
 */
 	/*
 	@Bean (destroyMethod = "disconnect")
