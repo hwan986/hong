@@ -27,7 +27,7 @@ public class App {
 	private static final Logger logger = LoggerFactory.getLogger(App.class);
 			
 }
-*/
+
 /*
 @SpringBootApplication
 public class App {
