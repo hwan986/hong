@@ -50,7 +50,6 @@ public class GroupsResource {
 			return ret;
 		} 
 
-		// modify code below to control plugs by publishing messages to MQTT broker
 		List<String> members = groups.getGroupMembers(group);
 		
 		for(String member: members){
@@ -82,7 +81,6 @@ public class GroupsResource {
 	}
 
 	protected Object makeGroup(String group) {
-		// modify code below to include plug states
 		HashMap<String, Object> ret = new HashMap<>();
 		List<Map<String, Object>> plugMembers = new ArrayList<Map<String,Object>>();
 		ret.put("name", group);

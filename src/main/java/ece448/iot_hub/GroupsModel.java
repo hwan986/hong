@@ -38,23 +38,5 @@ public class GroupsModel implements AutoCloseable{
 		groups.remove(group);
 	}
 	
-	synchronized public void publishState(String plug, String action) {
-		mqtt.publishAction(plug, action);	
-	}
-	
 
-	synchronized public String getState(String plugName) {
-		//Map<String,Object> plugProperties = new HashMap<>();
-		//plugProperties.put("state",mqtt.getStates().get(plugName));
-		//plugs.put(plugName, plugProperties);
-		return mqtt.getStates().get(plugName);
-	}
-
-	synchronized public String getPower(String plugName) {
-		//HashSet<String> ha = new HashSet<String>();
-		//Map<String,Object> plugProperties = new HashMap<>();
-		//plugProperties.put("state",mqtt.getStates().get(plugName));
-		//plugs.put(plugName, plugProperties);
-		return mqtt.getPowers().get(plugName);
-	}
 }

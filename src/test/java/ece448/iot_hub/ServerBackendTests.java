@@ -142,6 +142,7 @@ public class ServerBackendTests {
 		
 		ret.getPlug("a", null);
 		ret.getPlugs();
+		ret.removePlug("a");
 	}
 	
 	@Test

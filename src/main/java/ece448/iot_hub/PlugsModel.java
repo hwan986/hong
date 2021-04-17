@@ -18,10 +18,7 @@ public class PlugsModel implements AutoCloseable {
 	private final MqttController mqtt;
 	
 		public PlugsModel(String broker, String clientID, String topicPrefix) throws Exception {
-			//String broker = env.getProperty("mqtt.broker");
-			//String clientID = env.getProperty("mqtt.clientId");
-			//String topicPrefix = env.getProperty("mqtt.topicPrefix");
-			//
+			
 			this.mqtt = new MqttController(broker, clientID, topicPrefix);
 			this.mqtt.start();	
 		}
@@ -36,17 +33,9 @@ public class PlugsModel implements AutoCloseable {
 			plugs.put(plug, plugProperties); 
 		}
 
-		/*
-		synchronized public List<String> getGroupMembers(String plug) {
-		HashSet<String> members = (HashSet<String>) plugs.get(plug);
-		return (members == null)? new ArrayList<>(): new ArrayList<>(members);
-		}
-
-		/*
 		synchronized public void removePlug(String plug) {
 			plugs.remove(plug);
 		}
-		*/
 
 		synchronized public void publishState(String plug, String action) {
 			mqtt.publishAction(plug, action);	
