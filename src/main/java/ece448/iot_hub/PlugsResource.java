@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-
-
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +52,7 @@ public class PlugsResource {
 			plugs.publishState(plug, action);
 		
 			// modify code below to control plugs by publishing messages to MQTT broker
-			//List<String> members = plugs.getPlugMembers(plug);
+			
 			logger.info("Plug {}: state =  {}, action ={} ", plug,  plugs.getState(plug), action);
 			return makePlug(plug); //not null	
 	}
@@ -78,19 +76,15 @@ public class PlugsResource {
 	
 */
 
-	protected Object makePlug(String plug) {
+	protected Map<String,Object> makePlug(String plug) {
 		// modify code below to include plug states
-		HashMap<String, Object> ret = new HashMap<>();
+		Map<String, Object> ret = new HashMap<>();
 		
 		ret.put("name", plug);
 		ret.put("state", plugs.getState(plug));
-
-		if(plug.indexOf(".") != -1)
-		{
-			ret.put("power", Integer.parseInt(plug.split("\\.")[1]));
-		}
-		ret.put("power", "0");
-		logger.info("Plug {}: state {}, power {}", plug, plugs.getState(plug), ret.get("power"));
+		ret.put("power", plugs.getPower(plug));
+		
+		logger.info("Plug {}: state {}, power {}", plug, plugs.getState(plug), plugs.getPower(plug));
 		return ret;
 	}
 

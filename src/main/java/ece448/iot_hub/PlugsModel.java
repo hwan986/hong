@@ -37,19 +37,16 @@ public class PlugsModel implements AutoCloseable {
 		}
 
 		/*
-		synchronized public List<String> getPlugMembers(String plug) {
+		synchronized public List<String> getGroupMembers(String plug) {
 		HashSet<String> members = (HashSet<String>) plugs.get(plug);
 		return (members == null)? new ArrayList<>(): new ArrayList<>(members);
 		}
-	
-		*/
 
 		/*
 		synchronized public void removePlug(String plug) {
 			plugs.remove(plug);
 		}
 		*/
-
 
 		synchronized public void publishState(String plug, String action) {
 			mqtt.publishAction(plug, action);	
@@ -61,6 +58,13 @@ public class PlugsModel implements AutoCloseable {
 			plugProperties.put("state",mqtt.getStates().get(plugName));
 			plugs.put(plugName, plugProperties);
 			return mqtt.getStates().get(plugName);
+		}
+
+		synchronized public String getPower(String plugName) {
+			Map<String,Object> plugProperties = new HashMap<>();
+			plugProperties.put("power",mqtt.getPowers().get(plugName));
+			plugs.put(plugName, plugProperties);
+			return mqtt.getPowers().get(plugName);
 		}
 	
 		@Override

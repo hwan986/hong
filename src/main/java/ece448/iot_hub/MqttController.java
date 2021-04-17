@@ -58,7 +58,7 @@ public class MqttController {
 		}
 		catch (Exception e)
 		{
-			logger.error("MqttCtl {}: {} fail to publish", clientId, topic);
+			logger.error("MqttCtl {}: {} fail to publish {}", clientId, topic, e.toString());
 
 		}
 	}

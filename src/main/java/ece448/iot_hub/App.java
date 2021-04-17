@@ -18,8 +18,18 @@ public class App {
 		String clientID = env.getProperty("mqtt.clientId");
 		String topicPrefix = env.getProperty("mqtt.topicPrefix");
 		PlugsModel plugs = new PlugsModel(broker, clientID, topicPrefix);
-		logger.info("MqttClient {} connected: {}", clientID, broker);
+		logger.info("Plugs Mqtt {} connected: {}", clientID, broker);
 		return plugs;
+	}
+
+	@Bean
+	public GroupsModel groupsModel(Environment env) throws Exception{
+		String broker = env.getProperty("mqtt.broker");
+		String clientID = env.getProperty("mqtt.clientId");
+		String topicPrefix = env.getProperty("mqtt.topicPrefix");
+		GroupsModel groups = new GroupsModel(broker, clientID, topicPrefix);
+		logger.info("Groups Mqtt{} connected: {}", clientID, broker);
+		return groups;
 	}
     
 	
