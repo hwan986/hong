@@ -2,10 +2,7 @@ package ece448.iot_hub;
 
 import static org.junit.Assert.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.TreeMap;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.junit.Test;
@@ -220,41 +217,101 @@ public class GroupManagementTests {
 	@Test
 	public void test7() throws Exception {									
 		
-		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
-		PlugsResource ret = new PlugsResource(plugs);
+		PlugSim plug1 = new PlugSim("x");
+		PlugSim plug2 = new PlugSim("b.500");
+		PlugsModel plug = new PlugsModel(broker, clientId,topicPrefix);
+
+		GroupsModel group = new GroupsModel(broker, clientId,topicPrefix);
+		GroupsResource groups = new GroupsResource(group, plug);
+
+		ArrayList<PlugSim> plugs = new ArrayList<>();
+		plugs.add(plug1);
+		plugs.add(plug2);
+
+		ArrayList<String> members = new ArrayList<>();
+		members.add("a");
+		members.add("b");
+		members.add("c");
+
+		groups.createGroup("x", members);
+
+		ArrayList<String> members2 = new ArrayList<>();
+		members2.add("a");
+		members2.add("b");
+		members2.add("c");
+
+		groups.createGroup("y", members2);
 		
-		ret.createPlug("plug1", Arrays.asList("a","b","c"));
-		mqtt.publishAction("a", "on");
 		
-		ret.getPlug("a", "on");
-		plugs.close();
-		
+	
+		assertNotNull(groups.getGroups());
 	}
 	
 	@Test
 	public void test8() throws Exception {
 
-		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
-		PlugsResource ret = new PlugsResource(plugs);
+		PlugSim plug1 = new PlugSim("x");
+		PlugSim plug2 = new PlugSim("b.500");
+		PlugsModel plug = new PlugsModel(broker, clientId,topicPrefix);
+
+		GroupsModel group = new GroupsModel(broker, clientId,topicPrefix);
+		GroupsResource groups = new GroupsResource(group, plug);
+
+		ArrayList<PlugSim> plugs = new ArrayList<>();
+		plugs.add(plug1);
+		plugs.add(plug2);
+
+		ArrayList<String> members = new ArrayList<>();
+		members.add("a");
+		members.add("b");
+		members.add("c");
+
+		groups.createGroup("x", members);
+
+		ArrayList<String> members2 = new ArrayList<>();
+		members2.add("a");
+		members2.add("b");
+		members2.add("c");
+
+		groups.createGroup("y", members2);
 		
-		ret.createPlug("plug1", Arrays.asList("a","b","c"));
-		mqtt.publishAction("a", "on");
+		groups.getGroup("x", "on");
+		groups.getGroup("y", "off");
+	
 		
-		ret.getPlug("a", null);
-		ret.getPlugs();
 	}
 	
 	@Test
 	public void test9() throws Exception  {
 		
-		PlugsModel plugs = new PlugsModel(broker,topicPrefix,clientId );
-		PlugsResource ret = new PlugsResource(plugs);
+		PlugSim plug1 = new PlugSim("x");
+		PlugSim plug2 = new PlugSim("b.500");
+		PlugsModel plug = new PlugsModel(broker, clientId,topicPrefix);
+
+		GroupsModel group = new GroupsModel(broker, clientId,topicPrefix);
+		GroupsResource groups = new GroupsResource(group, plug);
+
+		ArrayList<PlugSim> plugs = new ArrayList<>();
+		plugs.add(plug1);
+		plugs.add(plug2);
+
+		ArrayList<String> members = new ArrayList<>();
+		members.add("a");
+		members.add("b");
+		members.add("c");
+
+		groups.createGroup("x", members);
+
+		ArrayList<String> members2 = new ArrayList<>();
+		members2.add("a");
+		members2.add("b");
+		members2.add("c");
+
+		groups.createGroup("y", members2);
 		
-		ret.createPlug("plug1", Arrays.asList("a","b","c"));
-		mqtt.publishAction("a", "on");
-		
-		ret.getPlug("a.500", "");
-		ret.getPlugs();
+		groups.getGroup("x", "on");
+		groups.getGroup("y", "off");
+		groups.getGroup("y", "toggle");
 	
 	}
 
