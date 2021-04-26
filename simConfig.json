@@ -2,9 +2,11 @@
   "httpPort": 8080,
   "plugNames": [
     "a",
-    "b.100",
-    "cc",
-    "dddd"],
+    "b",
+    "c",
+    "d",
+    "e",
+    "f"],
   "mqttBroker": "tcp://127.0.0.1",
   "mqttClientId": "iot_sim",
   "mqttTopicPrefix": "iot_ece448"

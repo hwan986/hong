@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public class Main implements AutoCloseable {
+	//private final MqttController mqtt;
 
 	public static void main(String[] args) throws Exception {
 		// load configuration file
@@ -38,11 +39,14 @@ public class Main implements AutoCloseable {
 		SpringApplication app = new SpringApplication(App.class);
 		app.setDefaultProperties(props);
 		this.appCtx = app.run(args);
+		//this.mqtt = new MqttController(config.getMqttBroker(), config.getMqttClientId(),config.getMqttTopicPrefix());
+		//this.mqtt.start();
 	}
 
 	@Override
 	public void close() throws Exception {
 		appCtx.close();
+		//mqtt.close();
 	}
 
 	private final ConfigurableApplicationContext appCtx;

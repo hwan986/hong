@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 import org.junit.Test;
 
 import ece448.iot_sim.PlugSim;
@@ -17,7 +17,7 @@ public class GroupManagementTests {
 	private static final String clientId = "iot_hub";
 	private static final String topicPrefix = "iot_ece448";
 	private final MqttController mqtt;
-	private static final MqttMessage msg = new MqttMessage();
+	
 	
 	
 	public GroupManagementTests() throws Exception{
@@ -312,6 +312,7 @@ public class GroupManagementTests {
 		groups.getGroup("x", "on");
 		groups.getGroup("y", "off");
 		groups.getGroup("y", "toggle");
+		group.close();
 	
 	}
 
